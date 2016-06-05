@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TableRow>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pwd"
+                    android:hint="@string/password"
+                    android:textColorHint="#868585"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:inputType="textPassword"
+                    android:textColor="#000000"
+                    android:background="@null"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </TableRow>
+            <View
+                android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+            <TableRow>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pwd_confirm"
+                    android:hint="@string/pwd_confirm"
+                    android:textColorHint="#868585"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:inputType="textPassword"
+                    android:textColor="#000000"
+                    android:background="@null"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </TableRow>
+            <View
+                android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+            <TableRow>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nickname"
+                    android:hint="@string/nickname"
+                    android:textColorHint="#868585"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@null"
+                    android:textColor="#000000"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </TableRow>
+            <View
+                android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+            <TableRow>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/school"
+                    android:hint="@string/school"
+                    android:textColorHint="#868585"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@null"
+                    android:textColor="#000000"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </TableRow>
+            <View
+                android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+            <TableRow>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/grade"
+                    android:hint="@string/grade"
+                    android:textColorHint="#868585"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@null"
+                    android:textColor="#000000"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </TableRow>
+            <View
+                android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+            <TableRow>
+                <Button
+                    android:id="@+id/regist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginStart="50dp"
+                    android:text="@string/regist"
+                    android:textStyle="bold"
+                    android:background="#2edf0a" />
+            </TableRow>
+            <TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginStart="60dp"
+                    android:src="@drawable/logo"
+                    />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>
