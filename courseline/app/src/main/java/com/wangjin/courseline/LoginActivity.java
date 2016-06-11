@@ -1,4 +1,4 @@
-package soa_final.courseline;
+package com.wangjin.courseline;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
