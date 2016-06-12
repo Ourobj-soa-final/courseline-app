@@ -1,21 +1,32 @@
 package com.wangjin.courseline;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.wangjin.courseline.NetWork.HttpRequestUtils;
 import com.wangjin.courseline.View.MHorizontalScrollView;
 import com.wangjin.courseline.model.Course;
 import com.wangjin.courseline.model.CourseTime;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,11 +34,23 @@ public class MainActivity extends AppCompatActivity {
     private int itemHeight;
     FrameLayout[] panels = new FrameLayout[7];
     private DisplayMetrics metrics;
+    ImageView add;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.week_layout);
+
+        testPost();
+
+        add = (ImageView) findViewById(R.id.add_course);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, AddCourseActivity.class);
+                startActivity(i);
+            }
+        });
         metrics = new DisplayMetrics();
         ((WindowManager)this.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay().getMetrics(metrics);
@@ -78,5 +101,24 @@ public class MainActivity extends AppCompatActivity {
             panels[ct.getWeek() - 1].addView(tv);
         }
 
+    }
+
+    private void testPost(){
+        Map<String,String> parms = new HashMap<>();
+        parms.put("name","nothinghappen");
+        parms.put("email","sb@sbmail.com");
+        parms.put("password","2314");
+        HttpRequestUtils.getInstance().postJson("http://smallpath.net/users", parms,
+                new HttpRequestUtils.onResponseFinishedListener() {
+            @Override
+            public void onFinish(JSONObject response) {
+                Log.d("ddbug",response.toString());
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        });
     }
 }

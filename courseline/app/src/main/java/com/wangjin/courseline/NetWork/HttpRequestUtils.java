@@ -1,17 +1,21 @@
 package com.wangjin.courseline.NetWork;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wangjin.courseline.BaseApplication;
 
 import org.json.JSONObject;
 
 import java.net.Authenticator;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -76,11 +80,15 @@ public class HttpRequestUtils {
      *
      **/
     public void postJson(String address,final Map<String,String> params,final onResponseFinishedListener listener) {
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,address,
-                new Response.Listener<JSONObject>() {
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST,address,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        listener.onFinish(response);
+                    public void onResponse(String response) {
+                        try {
+                            listener.onFinish(new JSONObject(response));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -93,8 +101,8 @@ public class HttpRequestUtils {
                 return params;
             }
         };
-        jsonObjectRequest.setShouldCache(false);
-        mRequestQueue.add(jsonObjectRequest);
+        stringRequest.setShouldCache(false);
+        mRequestQueue.add(stringRequest);
     }
 
 
