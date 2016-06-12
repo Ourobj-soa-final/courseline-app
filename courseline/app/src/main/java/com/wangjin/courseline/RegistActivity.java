@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collection;
@@ -27,7 +29,7 @@ import java.util.Set;
  */
 public class RegistActivity extends AppCompatActivity {
 
-    private TextView email;
+    private EditText email;
     private EditText pwd,name;
     private EditText pwd_confirm;
     private Button regist;
@@ -38,7 +40,7 @@ public class RegistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.regist_activity);
 
-        email = (TextView) findViewById(R.id.email_regist);
+        email = (EditText) findViewById(R.id.email_regist);
         pwd = (EditText) findViewById(R.id.pwd);
         pwd_confirm = (EditText) findViewById(R.id.pwd_confirm);
         name = (EditText) findViewById(R.id.nickname);
@@ -78,7 +80,7 @@ public class RegistActivity extends AppCompatActivity {
         View focusView = null;
 
         if (!TextUtils.isEmpty(password) && isPasswordValid(password) &&
-                isPasswordConfirm(password,password_confirm))
+                isPasswordConfirm(password,password_confirm) && isEmailValid(r_email))
         {
             RegistThread thread = RegistThread.getInstance();
             Map<String,String> map = new HashMap<String,String>();
@@ -94,18 +96,40 @@ public class RegistActivity extends AppCompatActivity {
                 public void onFinish(String response) {
                     //解析、处理返回的json数据
                     System.out.println(response);
-                    Intent intent = new Intent(context,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    int result = parse_json(response);//根据返回的json数据判断注册是否成功
+                    if (0 == result)
+                    {
+                        Intent intent = new Intent(context,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else if (1 == result)
+                    {
+                        new  AlertDialog.Builder(context).setTitle("提示").setMessage("注册失败，该邮箱已存在！")
+                                .setPositiveButton("确定",null).show();
+                    }
+
                 }
                 @Override
                 public void onError(VolleyError error) {
-                    new  AlertDialog.Builder(context).setTitle("提示").setMessage("注册失败，该邮箱已存在或存在网络故障！")
+                    new  AlertDialog.Builder(context).setTitle("提示").setMessage("注册失败，请检查网络连接！")
                             .setPositiveButton("确定",null).show();
                 }
             };
 
             thread.postJson("http://smallpath.net/users",map,mListener);
+        }
+
+        // Check for a valid email address.
+        else if (TextUtils.isEmpty(r_email)) {
+            email.setError(getString(R.string.error_field_required));
+            focusView = email;
+            cancel = true;
+        }
+        else if (!isEmailValid(r_email)) {
+            email.setError(getString(R.string.error_invalid_email));
+            focusView = email;
+            cancel = true;
         }
         else if (TextUtils.isEmpty(password))
         {
@@ -130,5 +154,22 @@ public class RegistActivity extends AppCompatActivity {
         {
             focusView.requestFocus();
         }
+    }
+
+    private int parse_json(String json){
+        try {
+            JSONObject object = new JSONObject(json);
+            int code = object.getInt("code");
+            return code;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return 1;
+    }
+
+    private boolean isEmailValid(String email) {
+        //检查邮箱格式是否合法
+        return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
