@@ -9,18 +9,16 @@ public class Course {
 
     private String name;
 
-    private String place;
-
     private String teacherName;
 
-    private ArrayList<CourseTime> times;
+    private CourseTime time;
 
-    public ArrayList<CourseTime> getTimes() {
-        return times;
+    public CourseTime getTime() {
+        return time;
     }
 
-    public void setTimes(ArrayList<CourseTime> times) {
-        this.times = times;
+    public void setTime(CourseTime time) {
+        this.time = time;
     }
 
     public String getName() {
@@ -30,15 +28,6 @@ public class Course {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
 
     public String getTeacherName() {
         return teacherName;

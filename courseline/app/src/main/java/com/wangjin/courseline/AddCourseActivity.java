@@ -15,14 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.wangjin.courseline.NetWork.HttpRequestUtils;
+import com.wangjin.courseline.model.Course;
 import com.wangjin.courseline.model.CourseTime;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddCourseActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     Button addCourseInfo;
+    Button saveCourse;
+    EditText coursNameEditText;
+    EditText teacherNameEditText;
     LinearLayout coursetime;
     ArrayList<CourseTime> times = new ArrayList<>();
     String[] weekday = {"一","二","三","四","五","六","七","八","九","十","十一"};
@@ -35,6 +45,10 @@ public class AddCourseActivity extends AppCompatActivity implements View.OnClick
         addCourseInfo = (Button) findViewById(R.id.add_courseinfo);
         addCourseInfo.setOnClickListener(this);
         coursetime = (LinearLayout) findViewById(R.id.courseinfo);
+        saveCourse = (Button) findViewById(R.id.save_course);
+        saveCourse.setOnClickListener(this);
+        coursNameEditText = (EditText) findViewById(R.id.course_name);
+        teacherNameEditText = (EditText) findViewById(R.id.course_place);
     }
 
     @Override
@@ -43,7 +57,9 @@ public class AddCourseActivity extends AppCompatActivity implements View.OnClick
             case R.id.add_courseinfo:
                 makeTimeDialog();
                 break;
-
+            case R.id.save_course:
+                saveCourse();
+                break;
         }
     }
 
@@ -117,6 +133,33 @@ public class AddCourseActivity extends AppCompatActivity implements View.OnClick
         });
         builder.create();
         builder.show();
+    }
+
+    public void saveCourse(){
+        int userid = Saver.getUserId();
+        String courseName = coursNameEditText.getText().toString();
+        String teacherName = teacherNameEditText.getText().toString();
+        for (CourseTime time : times){
+            Map<String,String> parms = new HashMap<>();
+            parms.put("coursename",courseName);
+            parms.put("week",String.valueOf(time.getWeek()));
+            parms.put("startnumber",String.valueOf(time.getBeginTime()));
+            parms.put("endnumber",String.valueOf(time.getEndTime()));
+            parms.put("teachername",teacherName);
+            parms.put("courseroom",time.getPlace());
+            parms.put("userid",String.valueOf(userid));
+            HttpRequestUtils.getInstance().postJson("http://smallpath.net/courses", parms, new HttpRequestUtils.onResponseFinishedListener() {
+                @Override
+                public void onFinish(String response) {
+                    System.out.println(response);
+                }
+
+                @Override
+                public void onError(VolleyError error) {
+
+                }
+            });
+        }
     }
 
 }

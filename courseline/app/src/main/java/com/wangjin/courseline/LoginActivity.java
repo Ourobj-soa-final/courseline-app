@@ -1,4 +1,4 @@
-package soa_final.courseline;
+package com.wangjin.courseline;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
@@ -77,6 +78,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        Log.d("ddbug",String.valueOf(Saver.getUserId()));
+        if (Saver.getUserId() != -1){
+            Intent i = new Intent(LoginActivity.this,MainActivity.class);
+            this.finish();
+            startActivity(i);
+        }
 
         context = this;
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -202,6 +210,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Bundle bundle = new Bundle();
                             bundle.putString("email",email);
                             bundle.putString("password",password);
+                            Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(i);
                             break;
                         }
 
@@ -342,7 +352,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
             else {
                 //若用户不输入密码，则跳转至注册页面
-                Intent intent = new Intent(context,RegistActivity.class);
+                Intent intent = new Intent(context, RegistActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("email",mEmail);
                 intent.putExtras(bundle);

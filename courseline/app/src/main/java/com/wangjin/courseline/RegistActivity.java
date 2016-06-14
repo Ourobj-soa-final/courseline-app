@@ -1,4 +1,4 @@
-package soa_final.courseline;
+package com.wangjin.courseline;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,21 +34,22 @@ public class RegistActivity extends AppCompatActivity {
     private EditText pwd_confirm;
     private Button regist;
     private Context context;
+    String r_email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.regist_activity);
 
-        email = (EditText) findViewById(R.id.email_regist);
+        //email = (EditText) findViewById(R.id.email_regist);
         pwd = (EditText) findViewById(R.id.pwd);
         pwd_confirm = (EditText) findViewById(R.id.pwd_confirm);
         name = (EditText) findViewById(R.id.nickname);
         context = this;
 
         Bundle bundle = this.getIntent().getExtras();
-        String r_email = bundle.getString("email");
-        email.setText(r_email);
+        r_email = bundle.getString("email");
+        //email.setText(r_email);
 
         regist = (Button) findViewById(R.id.regist);
         regist.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,7 @@ public class RegistActivity extends AppCompatActivity {
     {
         String password = pwd.getText().toString();
         String password_confirm = pwd_confirm.getText().toString();
-        String r_email = email.getText().toString();
+        //String r_email = email.getText().toString();
         String r_name = name.getText().toString();
 
         boolean cancel = false;

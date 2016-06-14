@@ -1,9 +1,10 @@
-package soa_final.courseline;
+package com.wangjin.courseline;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,6 +71,10 @@ public class LoginThread extends Thread {
         try {
             JSONObject jsonObject = new JSONObject(json);
             int errcode = jsonObject.getInt("code");
+            JSONArray res = jsonObject.getJSONArray("result");
+            JSONObject j = res.getJSONObject(0);
+            int userId = j.getInt("id");
+            Saver.saveUserId(userId);
             return errcode;
         } catch (JSONException e) {
             e.printStackTrace();

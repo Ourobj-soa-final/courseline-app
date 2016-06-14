@@ -55,10 +55,10 @@ public class HttpRequestUtils {
      *
      **/
     public void getJson(String address, final onResponseFinishedListener listener) {
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(address, null,
-                new Response.Listener<JSONObject>() {
+        final StringRequest jsonObjectRequest = new StringRequest(address,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         listener.onFinish(response);
                     }
                 }, new Response.ErrorListener() {
@@ -84,11 +84,7 @@ public class HttpRequestUtils {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            listener.onFinish(new JSONObject(response));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
+                        listener.onFinish(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -112,7 +108,7 @@ public class HttpRequestUtils {
     public interface onResponseFinishedListener {
 
         //请求成功返回时调用
-        void onFinish(JSONObject response);
+        void onFinish(String response);
 
         //请求错误时调用
         void onError(VolleyError error);
