@@ -88,10 +88,6 @@ public class JsonParser {
     }
 
 
-
-
-
-
     public static int getWeek(String week){
         switch (week){
             case "星期一":
