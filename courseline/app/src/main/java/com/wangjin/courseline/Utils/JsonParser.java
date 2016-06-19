@@ -64,9 +64,11 @@ public class JsonParser {
                 String arrangement = "";
                 String place = "";
                 String[] begin_end = {"",""};
+                String remark = "";
                 name = exam.getString("courseName");
                 date = exam.getString("date");
                 arrangement = exam.getString("examArrangement");
+                remark = exam.getString("remark");
                 if (!arrangement.equals("")) {
                     place = exam.getString("place");
                     String[] s = arrangement.split("\\u003cbr/\\u003e");
@@ -78,6 +80,7 @@ public class JsonParser {
                 e.setEnd_time(begin_end[1]);
                 e.setLocation(place);
                 e.setSubject(name);
+                e.setRemark(remark);
                 exams.add(e);
             }
         } catch (Exception e) {
