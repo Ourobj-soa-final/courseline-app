@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.week_layout);
+
+        
+
         add = (ImageView) findViewById(R.id.add_course);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
