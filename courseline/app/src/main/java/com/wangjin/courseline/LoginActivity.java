@@ -80,11 +80,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         populateAutoComplete();
 
         Log.d("ddbug",String.valueOf(Saver.getUserId()));
-        if (Saver.getUserId() != -1){
+        /*if (Saver.getUserId() != -1){
             Intent i = new Intent(LoginActivity.this,MainActivity.class);
             this.finish();
             startActivity(i);
-        }
+        }*/
 
         context = this;
         mPasswordView = (EditText) findViewById(R.id.password);
