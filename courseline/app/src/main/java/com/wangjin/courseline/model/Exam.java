@@ -4,13 +4,22 @@ package com.wangjin.courseline.model;
  * Created by zhengsuren on 16/6/19.
  */
 public class Exam {
-    private String start_time,location,subject,end_time,date;
+    private String start_time,location,subject,end_time,date,remark;
 
     public String getStart_time() {
         return start_time;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getDate() {
+
         return date;
     }
 
