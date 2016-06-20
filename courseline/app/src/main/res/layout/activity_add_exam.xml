@@ -7,7 +7,9 @@
         android:layout_height="match_parent"
         android:background="@drawable/background">
         <TableRow>
-
+            <TextView
+                android:text="test"
+                />
         </TableRow>
     </TableLayout>
 </LinearLayout>
