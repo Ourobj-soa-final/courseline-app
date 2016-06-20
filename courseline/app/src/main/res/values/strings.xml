@@ -20,4 +20,8 @@
     <string name="regist">注册</string>
     <string name="error_password_confirm">确认密码不一致，请重新输入</string>
     <string name="title_activity_add_course">AddCourseActivity</string>
+    <string name="subject">考试科目</string>
+    <string name="begin">开始时间</string>
+    <string name="end">结束时间</string>
+    <string name="date">考试日期</string>
 </resources>
