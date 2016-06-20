@@ -11,6 +11,13 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/auto_course_input"
+            android:text="课表导入"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
@@ -24,7 +31,17 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:src="@android:drawable/ic_input_add" />
+            android:src="@android:drawable/ic_menu_add" />
+
+        <ImageView
+            android:id="@+id/refresh_course"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:src="@android:drawable/ic_menu_rotate"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/add_course"
+            android:layout_toStartOf="@+id/add_course" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

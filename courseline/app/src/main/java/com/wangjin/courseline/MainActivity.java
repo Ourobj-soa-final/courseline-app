@@ -1,6 +1,8 @@
 package com.wangjin.courseline;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,9 +12,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -47,16 +51,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.week_layout);
 
-        //List<Course> courses = JsonParser.parseCourseFromJson(res);
-        //Log.d("ddebug","coursesize:"+courses.size());
-        //for (Course c : courses){
-        //    Log.d("ddebug",c.getName() + " " + c.getTeacherName() + " " + c.getTime().getPlace() + " " +c.getTime().getBeginTime() + " " +c.getTime().getEndTime() + " " + c.getTime().getWeek());
-       // }
+//        List<Course> courses = JsonParser.parseCourseFromJson(res);
+//        Log.d("ddebug","coursesize:"+courses.size());
+//        for (Course c : courses){
+//            Log.d("ddebug",c.getName() + " " + c.getTeacherName() + " " + c.getTime().getPlace() + " " +c.getTime().getBeginTime() + " " +c.getTime().getEndTime() + " " + c.getTime().getWeek());
+//        }
         //List<Exam> exams = JsonParser.parseExamFromJson(res);
         //for (Exam e : exams){
             //Log.d("ddebug",e.getSubject() + " " +e.getLocation() + " " +e.getStart_time() + " " +
             //e.getEnd_time() + " " + e.getDate() + " " +e.getRemark());
         //}
+
+        TextView t = (TextView) findViewById(R.id.auto_course_input);
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCourseInputDialog();
+            }
+        });
+
+        ImageView refresh = (ImageView) findViewById(R.id.refresh_course);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
+
 
         add = (ImageView) findViewById(R.id.add_course);
         add.setOnClickListener(new View.OnClickListener() {
@@ -139,5 +160,91 @@ public class MainActivity extends AppCompatActivity {
         return c;
     }
 
+    private void showCourseInputDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT);
+        builder.setTitle("输入你的教务账号");
+        View v = getLayoutInflater().inflate(R.layout.course_input_dialogview,null);
+        builder.setView(v);
+        final EditText num = (EditText) v.findViewById(R.id.xuehao);
+        final EditText pwd = (EditText) v.findViewById(R.id.mima);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String xuehao = num.getText().toString();
+                String mima = pwd.getText().toString();
+                HttpRequestUtils.getInstance().getJson("http://121.42.38.10:8080/courselineServer/getcourseinfo?id="
+                        + xuehao + "&password=" + mima, new HttpRequestUtils.onResponseFinishedListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        List<Course> courses = JsonParser.parseCourseFromJson(response);
+                        Log.d("ddebug", response);
+                        Log.d("ddebug", "coursesize:" + courses.size());
+                        for (Course c : courses) {
+                            Log.d("ddebug", c.getName() + " " + c.getTeacherName() + " " + c.getTime().getPlace() + " " + c.getTime().getBeginTime() + " " + c.getTime().getEndTime() + " " + c.getTime().getWeek());
+                        }
+                        courseLeadingIn(courses);
+                    }
 
+                    @Override
+                    public void onError(VolleyError error) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
+    private void courseLeadingIn(final List<Course> courses){
+        HttpRequestUtils.getInstance().delete("http://smallpath.net/courses/userid/" + Saver.getUserId(), new HttpRequestUtils.onResponseFinishedListener() {
+            @Override
+            public void onFinish(String response) {
+                saveCoures(courses);
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        });
+    }
+
+    private void saveCoures(List<Course> courses){
+        int userid = Saver.getUserId();
+        for (Course course : courses) {
+            Map<String,String> parms = new HashMap<>();
+            parms.put("coursename",course.getName());
+            parms.put("week",String.valueOf(course.getTime().getWeek()));
+            parms.put("startnumber",String.valueOf(course.getTime().getBeginTime()));
+            parms.put("endnumber",String.valueOf(course.getTime().getEndTime()));
+            parms.put("teachername",course.getTeacherName());
+            parms.put("courseroom",course.getTime().getPlace());
+            parms.put("userid",String.valueOf(userid));
+            HttpRequestUtils.getInstance().postJson("http://smallpath.net/courses", parms, new HttpRequestUtils.onResponseFinishedListener() {
+                @Override
+                public void onFinish(String response) {
+
+                }
+
+                @Override
+                public void onError(VolleyError error) {
+
+                }
+            });
+        }
+    }
+
+    private void refresh(){
+        for (int i = 0;i< panels.length;i++){
+            panels[i].removeAllViews();
+        }
+        getDataAndShow();
+    }
 }

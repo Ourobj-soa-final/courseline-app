@@ -101,6 +101,23 @@ public class HttpRequestUtils {
         mRequestQueue.add(stringRequest);
     }
 
+    public void delete(String address, final onResponseFinishedListener listener){
+        final StringRequest stringRequest = new StringRequest(Request.Method.DELETE,address,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        listener.onFinish(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+        stringRequest.setShouldCache(false);
+        mRequestQueue.add(stringRequest);
+    }
+
 
     /**
      *  回调接口，处理请求的返回
