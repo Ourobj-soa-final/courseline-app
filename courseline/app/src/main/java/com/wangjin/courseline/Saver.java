@@ -21,4 +21,8 @@ public class Saver {
     public static int getUserId(){
         return sp.getInt("userId",-1);
     }
+
+    public static void deleteUserId(){
+        sp.edit().clear().commit();
+    }
 }

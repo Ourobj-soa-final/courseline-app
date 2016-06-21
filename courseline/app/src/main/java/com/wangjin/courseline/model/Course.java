@@ -7,6 +7,8 @@ import java.util.ArrayList;
  */
 public class Course {
 
+    private int id;
+
     private String name;
 
     private String teacherName;
@@ -37,5 +39,11 @@ public class Course {
         this.teacherName = teacherName;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 }

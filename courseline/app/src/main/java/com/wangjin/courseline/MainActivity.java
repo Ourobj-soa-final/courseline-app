@@ -70,11 +70,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TextView exam = (TextView) findViewById(R.id.exam);
+        exam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,ExamActivity.class);
+                startActivity(i);
+            }
+        });
+
         ImageView refresh = (ImageView) findViewById(R.id.refresh_course);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 refresh();
+            }
+        });
+
+        TextView logoff = (TextView) findViewById(R.id.logoff);
+        logoff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Saver.deleteUserId();
+                finish();
             }
         });
 
@@ -115,11 +133,18 @@ public class MainActivity extends AppCompatActivity {
         //tv.setGravity(Gravity.TOP);
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setTextSize(12);
-        tv.setText(course.getName() +"\n" + course.getTime().getPlace() + "\n" +course.getTeacherName());
+        tv.setText(course.getName() + "\n" + course.getTime().getPlace() + "\n" + course.getTeacherName());
         tv.setTextColor(getResources().getColor(R.color.white));
         tv.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         //tv.setY(itemHeight*ct.getBeginTime());
         panels[ct.getWeek() - 1].addView(tv);
+        tv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showDeleteDialog(course.getId());
+                return false;
+            }
+        });
     }
 
 
@@ -151,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         Course c = new Course();
         c.setName(js.getString("course_name"));
         c.setTeacherName(js.getString("teacher_name"));
+        c.setId(js.getInt("id"));
         CourseTime ct = new CourseTime();
         ct.setBeginTime(js.getInt("start_number"));
         ct.setEndTime(js.getInt("end_number"));
@@ -246,5 +272,34 @@ public class MainActivity extends AppCompatActivity {
             panels[i].removeAllViews();
         }
         getDataAndShow();
+    }
+
+    private void showDeleteDialog(int id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT);
+        builder.setTitle("是否删除该课程");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                HttpRequestUtils.getInstance().delete("http://smallpath.net/courses/id/" + id, new HttpRequestUtils.onResponseFinishedListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        refresh();
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
     }
 }

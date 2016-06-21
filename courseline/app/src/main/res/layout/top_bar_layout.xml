@@ -12,10 +12,21 @@
 
         <TextView
             android:id="@+id/auto_course_input"
+            android:layout_margin="10dp"
             android:text="课表导入"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
+
+        <TextView
+            android:text="考试"
+            android:id="@+id/exam"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/auto_course_input"
+            android:layout_toEndOf="@+id/auto_course_input" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,6 +35,16 @@
             android:gravity="center"
             android:text="课表"
             android:textSize="20dp" />
+
+        <TextView
+            android:text="注销"
+            android:id="@+id/logoff"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/auto_course_input"
+            android:layout_toLeftOf="@+id/refresh_course"
+            android:layout_toStartOf="@+id/refresh_course" />
 
         <ImageView
             android:id="@+id/add_course"
