@@ -25,7 +25,8 @@ public class JsonParser {
                     String courseName = course.getString("courseName");
                     String teacher = course.getString("teacher");
                     String classArrangeMent = course.getString("classArrangement");
-                    String[] s = classArrangeMent.split("\\u003cbr\\u003e");
+                    //String[] s = classArrangeMent.split("\\u003cbr\\u003e");
+                    String[] s = classArrangeMent.split(",");
                     for (int j = 0;j < s.length;j++){
                         String[] ss = s[j].split(" ");
                         int week = getWeek(ss[1]);
