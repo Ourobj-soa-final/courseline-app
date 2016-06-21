@@ -6,10 +6,10 @@
     android:background="@null">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="50dp">
     <TextView
         android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_height="match_parent"
         android:id="@+id/subject"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
@@ -18,16 +18,16 @@
         android:text="@string/subject"/>
     <TextView
         android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_height="match_parent"
         android:id="@+id/exbegin"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:textSize="15sp"
         android:textColor="@color/lightblue"
-        android:text="@string/begin"/>
+        android:text="@string/begin_end"/>
     <TextView
         android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_height="match_parent"
         android:id="@+id/exend"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
@@ -36,7 +36,7 @@
         android:text="@string/end"/>
     <TextView
         android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_height="match_parent"
         android:id="@+id/exdate"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"

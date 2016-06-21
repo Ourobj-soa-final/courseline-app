@@ -4,7 +4,7 @@ package com.wangjin.courseline.model;
  * Created by zhengsuren on 16/6/19.
  */
 public class Exam {
-    private String start_time,location,subject,end_time,date,remark;
+    private String start_time,location,subject,end_time,date,remark,start_end;
 
     public String getStart_time() {
         return start_time;
@@ -53,5 +53,17 @@ public class Exam {
 
     public void setEnd_time(String end_time) {
         this.end_time = end_time;
+    }
+
+    public String getStart_end()
+    {
+        start_end = start_time + "-" + end_time;
+
+        if (start_end.equals(null))
+        {
+            return "";
+        }
+
+        return start_end;
     }
 }
