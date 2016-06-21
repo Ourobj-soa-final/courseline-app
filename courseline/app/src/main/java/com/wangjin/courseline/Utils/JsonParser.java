@@ -8,7 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,6 +69,7 @@ public class JsonParser {
                 String place = "";
                 String[] begin_end = {"",""};
                 String remark = "";
+                int id = exam.getInt("courseId");
                 name = exam.getString("courseName");
                 date = exam.getString("date");
                 arrangement = exam.getString("examArrangement");
@@ -82,6 +86,7 @@ public class JsonParser {
                 e.setLocation(place);
                 e.setSubject(name);
                 e.setRemark(remark);
+                e.setId(id);
                 exams.add(e);
             }
         } catch (Exception e) {
@@ -91,6 +96,43 @@ public class JsonParser {
         return exams;
     }
 
+    public static List<Exam> parseExam(String js)
+    {
+        //解析从数据库服务器返回的json数据
+        List<Exam> exams = new ArrayList<>();
+
+        try {
+            JSONArray array = new JSONArray(js);
+            for (int i = 0;i < array.length();i++)
+            {
+                JSONObject exam = array.getJSONObject(i);
+                String name = exam.getString("name");
+                String place = exam.getString("place");
+                int id = exam.getInt("id");
+                String start_time = exam.getString("start_time");
+                String end_time = exam.getString("end_time");
+
+                String date = dateParse(start_time);
+                start_time = timeParse(start_time);
+                end_time = timeParse(end_time);
+
+                Exam e = new Exam();
+                e.setDate(date);
+                e.setStart_time(start_time);
+                e.setEnd_time(end_time);
+                e.setLocation(place);
+                e.setSubject(name);
+                e.setId(id);
+                exams.add(e);
+
+                System.out.println("考试科目是~~~~~~~"+name);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return exams;
+    }
 
     public static int getWeek(String week){
         switch (week){
@@ -119,5 +161,41 @@ public class JsonParser {
                 return 1;
 
         }
+    }
+
+    private static String timeParse(String oldDate)
+    {
+        SimpleDateFormat formatter, FORMATTER;
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date date = null;
+        try {
+            date = formatter.parse(oldDate.substring(0, 24));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        FORMATTER = new SimpleDateFormat("HH:mm");
+        String result = FORMATTER.format(date);
+        System.out.println("OldDate-->"+oldDate);
+        System.out.println("NewDate-->"+ result);
+
+        return result;
+    }
+
+    private static String dateParse(String oldDate)
+    {
+        SimpleDateFormat formatter, FORMATTER;
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date date = null;
+        try {
+            date = formatter.parse(oldDate.substring(0, 24));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+        String result = FORMATTER.format(date);
+        System.out.println("OldDate-->"+oldDate);
+        System.out.println("NewDate-->"+ result);
+
+        return result;
     }
 }

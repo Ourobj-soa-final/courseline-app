@@ -8,6 +8,7 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,6 +24,7 @@ import com.wangjin.courseline.model.Exam;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengsuren on 16/6/21.
@@ -31,7 +33,7 @@ public class ExamActivity extends Activity {
 
     private ListView listView;
     private JsonAdapter adapter;
-    private Button button;
+    private Button addExam_button,delExam_button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,28 +41,37 @@ public class ExamActivity extends Activity {
         setContentView(R.layout.exam_activity);
 
         listView = (ListView) findViewById(R.id.mlistview);
-        button = (Button) findViewById(R.id.auto_add_exam);
+        addExam_button = (Button) findViewById(R.id.auto_add_exam);
+        delExam_button = (Button) findViewById(R.id.delete_exam);
 
-        //创建键值对,存储要填入的值
-       /* ArrayList<HashMap<String,String>> mylist = new ArrayList<HashMap<String, String>>();
-        HashMap<String,String> map = new HashMap<String, String>();
-        map.put("subject","测试科目1");
-        map.put("begin","10:00");
-        map.put("end","12:00");
-        map.put("date","12月28日");
-        mylist.add(map);
-
-        SimpleAdapter mAdapter = new SimpleAdapter(this,mylist,R.layout.exam_item,
-                new String[]{"subject","begin","end","date"},new int[]{R.id.subject,R.id.exbegin,R.id.exend,R.id.exdate});
-
-        listView.setAdapter(mAdapter);*/
         adapter = new JsonAdapter(this);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        addExam_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showExamInput();
             }
         });
+
+        delExam_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://smallpath.net/exams/userid/" + Saver.getUserId();
+                HttpRequestUtils.getInstance().delete(url, new HttpRequestUtils.onResponseFinishedListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        refresh();
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+
+                    }
+                });
+            }
+        });
+
+        refresh();
     }
 
     private void showExamInput()
@@ -74,17 +85,48 @@ public class ExamActivity extends Activity {
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String xuehao = num.getText().toString();
-                String mima = pwd.getText().toString();
+                String student_Id = num.getText().toString();
+                String student_pwd = pwd.getText().toString();
                 HttpRequestUtils.getInstance().getJson("http://121.42.38.10:8080/courselineServer/getexamsinfo?id="
-                        + xuehao + "&password=" + mima, new HttpRequestUtils.onResponseFinishedListener() {
+                        + student_Id + "&password=" + student_pwd, new HttpRequestUtils.onResponseFinishedListener() {
                     @Override
                     public void onFinish(String response) {
                         List<Exam> exams = JsonParser.parseExamFromJson(response);
                         //将考试数据存入适配器,返回给页面
                         adapter.setData(exams);
                         listView.setAdapter(adapter);
+                        //保存学生账号密码,使得考试列表保存
+                        Saver.saveStudent(student_Id,student_pwd);
+                        saveExams(exams);
                         Log.d("ddebug", response);
+                    }
+                    @Override
+                    public void onError(VolleyError error) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
+    private void showDeleteDialog(int id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT);
+        builder.setTitle("是否删除该考试?");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                HttpRequestUtils.getInstance().delete("http://smallpath.net/exams/id/" + id, new HttpRequestUtils.onResponseFinishedListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        refresh();
 
                     }
 
@@ -103,5 +145,86 @@ public class ExamActivity extends Activity {
         });
         builder.create();
         builder.show();
+    }
+
+    private void saveExams(List<Exam> exams){
+        int userid = Saver.getUserId();
+        for (Exam exam : exams) {
+            Map<String,String> parms = new HashMap<>();
+            parms.put("name",exam.getSubject());
+            parms.put("place",exam.getLocation());
+            String starttime = exam.getDate() + " " + exam.getStart_time();
+            String endtime = exam.getDate() + " " + exam.getEnd_time();
+            parms.put("starttime",starttime);
+            parms.put("endtime",endtime);
+            parms.put("userid",String.valueOf(userid));
+            HttpRequestUtils.getInstance().postJson("http://smallpath.net/exams", parms, new HttpRequestUtils.onResponseFinishedListener() {
+                @Override
+                public void onFinish(String response) {
+                    System.out.println(response);
+                }
+
+                @Override
+                public void onError(VolleyError error) {
+
+                }
+            });
+        }
+    }
+
+    private void refresh()
+    {
+        //刷新页面
+       /* if (!Saver.getStudentId().isEmpty())
+        {
+            HttpRequestUtils.getInstance().getJson("http://121.42.38.10:8080/courselineServer/getexamsinfo?id="
+                    + Saver.getStudentId() + "&password=" + Saver.getStudentPwd(), new HttpRequestUtils.onResponseFinishedListener() {
+                @Override
+                public void onFinish(String response) {
+                    List<Exam> exams = JsonParser.parseExamFromJson(response);
+                    //将考试数据存入适配器,返回给页面
+                    adapter.setData(exams);
+                    listView.setAdapter(adapter);
+                    Log.d("ddebug", response);
+                    saveExams(exams);
+                }
+                @Override
+                public void onError(VolleyError error) {
+
+                }
+            });
+        }*/
+
+        if (!Saver.getStudentId().isEmpty() && Saver.getUserId() != -1)
+        {
+            String url = "http://smallpath.net/exams/userid/" + Saver.getUserId();
+
+            HttpRequestUtils.getInstance().getJson(url,new HttpRequestUtils.onResponseFinishedListener()
+            {
+                @Override
+                public void onFinish(String response) {
+                    List<Exam> exams = JsonParser.parseExam(response);
+                    //将考试数据存入适配器,返回给页面
+                    adapter.setData(exams);
+                    listView.setAdapter(adapter);
+
+                    listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                            int mid = exams.get(position).getId();
+                            showDeleteDialog(mid);
+                            return false;
+                        }
+                    });
+                    Log.d("ddebug", response);
+                }
+
+                @Override
+                public void onError(VolleyError error) {
+
+                }
+            });
+        }
     }
 }

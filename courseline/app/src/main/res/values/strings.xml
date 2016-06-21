@@ -25,5 +25,5 @@
     <string name="end">考试地点</string>
     <string name="date">考试日期</string>
     <string name="auto_add_exam">自动导入考试</string>
-    <string name="add_exam">手动导入考试</string>
+    <string name="delete_exam">清空考试列表</string>
 </resources>

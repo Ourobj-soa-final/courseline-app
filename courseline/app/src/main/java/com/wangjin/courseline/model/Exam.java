@@ -4,6 +4,9 @@ package com.wangjin.courseline.model;
  * Created by zhengsuren on 16/6/19.
  */
 public class Exam {
+
+    private int id;
+
     private String start_time,location,subject,end_time,date,remark,start_end;
 
     public String getStart_time() {
@@ -18,9 +21,18 @@ public class Exam {
         this.remark = remark;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDate() {
 
         return date;
+
     }
 
     public void setDate(String date) {
@@ -59,7 +71,7 @@ public class Exam {
     {
         start_end = start_time + "-" + end_time;
 
-        if (start_end.equals(null))
+        if (start_end.equals("-"))
         {
             return "";
         }

@@ -22,6 +22,7 @@
         </activity>
         <activity
             android:name=".RegistActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:label="注册">
         </activity>
         <activity
@@ -34,7 +35,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

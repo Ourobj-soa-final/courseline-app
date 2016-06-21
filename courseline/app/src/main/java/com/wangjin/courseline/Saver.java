@@ -18,8 +18,21 @@ public class Saver {
         sp.edit().putInt("userId",userId).commit();
     }
 
+    public static void saveStudent(String student_id,String student_pwd) {
+        sp.edit().putString("student_id",student_id).commit();
+        sp.edit().putString("student_pwd",student_pwd).commit();
+    }
+
     public static int getUserId(){
         return sp.getInt("userId",-1);
+    }
+
+    public static String getStudentId(){
+        return sp.getString("student_id","");
+    }
+
+    public static String getStudentPwd(){
+        return sp.getString("student_pwd","");
     }
 
     public static void deleteUserId(){

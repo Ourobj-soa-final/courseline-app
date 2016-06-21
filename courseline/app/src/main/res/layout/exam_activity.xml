@@ -60,7 +60,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:id="@+id/auto_add_exam"
-            android:layout_marginLeft="145dp"
+            android:layout_marginLeft="80dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/auto_add_exam"
@@ -69,18 +69,18 @@
             android:textStyle="bold"
             />
 
-       <!-- <Button
+        <Button
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:id="@+id/add_exam"
+            android:id="@+id/delete_exam"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/add_exam"
+            android:text="@string/delete_exam"
             android:textSize="15sp"
             android:background="#2edf0a"
             android:textStyle="bold"
-            />  -->
+            />
 
     </LinearLayout>
 
