@@ -76,6 +76,7 @@ public class ExamActivity extends Activity {
 
     private void showExamInput()
     {
+        //将学院网上的考试信息导入
         AlertDialog.Builder builder = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle("输入你的教务账号");
         View v = getLayoutInflater().inflate(R.layout.course_input_dialogview,null);
@@ -92,9 +93,6 @@ public class ExamActivity extends Activity {
                     @Override
                     public void onFinish(String response) {
                         List<Exam> exams = JsonParser.parseExamFromJson(response);
-                        //将考试数据存入适配器,返回给页面
-                        adapter.setData(exams);
-                        listView.setAdapter(adapter);
                         //保存学生账号密码,使得考试列表保存
                         Saver.saveStudent(student_Id,student_pwd);
                         saveExams(exams);
@@ -117,7 +115,7 @@ public class ExamActivity extends Activity {
         builder.show();
     }
 
-    private void showDeleteDialog(int id){
+    private void showDeleteDialog(String id){
         AlertDialog.Builder builder = new AlertDialog.Builder(this,AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle("是否删除该考试?");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -153,48 +151,47 @@ public class ExamActivity extends Activity {
             Map<String,String> parms = new HashMap<>();
             parms.put("name",exam.getSubject());
             parms.put("place",exam.getLocation());
-            String starttime = exam.getDate() + " " + exam.getStart_time();
-            String endtime = exam.getDate() + " " + exam.getEnd_time();
+
+            String starttime;
+            String endtime;
+
+            starttime = exam.getDate() + " " + exam.getStart_time();
+            endtime = exam.getDate() + " " + exam.getEnd_time();
             parms.put("starttime",starttime);
             parms.put("endtime",endtime);
+
+            //注意参数格式!!!yyyy-mm-dd hh:mm:ss
+            /*if (!starttime.isEmpty() || !endtime.isEmpty())
+            {
+                starttime = exam.getDate() + " " + exam.getStart_time();
+                endtime = exam.getDate() + " " + exam.getEnd_time();
+                parms.put("starttime",starttime);
+                parms.put("endtime",endtime);
+            }
+            else {
+                parms.put("starttime","2016-06-28 16:00");
+                parms.put("endtime","2016-06-28 16:00");
+                System.out.println("check success~~~~~!!!");
+            }*/
+
             parms.put("userid",String.valueOf(userid));
             HttpRequestUtils.getInstance().postJson("http://smallpath.net/exams", parms, new HttpRequestUtils.onResponseFinishedListener() {
                 @Override
                 public void onFinish(String response) {
-                    System.out.println(response);
-                }
 
+                }
                 @Override
                 public void onError(VolleyError error) {
 
                 }
             });
         }
+
+        refresh();
     }
 
     private void refresh()
     {
-        //刷新页面
-       /* if (!Saver.getStudentId().isEmpty())
-        {
-            HttpRequestUtils.getInstance().getJson("http://121.42.38.10:8080/courselineServer/getexamsinfo?id="
-                    + Saver.getStudentId() + "&password=" + Saver.getStudentPwd(), new HttpRequestUtils.onResponseFinishedListener() {
-                @Override
-                public void onFinish(String response) {
-                    List<Exam> exams = JsonParser.parseExamFromJson(response);
-                    //将考试数据存入适配器,返回给页面
-                    adapter.setData(exams);
-                    listView.setAdapter(adapter);
-                    Log.d("ddebug", response);
-                    saveExams(exams);
-                }
-                @Override
-                public void onError(VolleyError error) {
-
-                }
-            });
-        }*/
-
         if (!Saver.getStudentId().isEmpty() && Saver.getUserId() != -1)
         {
             String url = "http://smallpath.net/exams/userid/" + Saver.getUserId();
@@ -212,7 +209,7 @@ public class ExamActivity extends Activity {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
                         {
-                            int mid = exams.get(position).getId();
+                            String mid = exams.get(position).getId();
                             showDeleteDialog(mid);
                             return false;
                         }

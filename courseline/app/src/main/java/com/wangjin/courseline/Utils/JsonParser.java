@@ -69,7 +69,7 @@ public class JsonParser {
                 String place = "";
                 String[] begin_end = {"",""};
                 String remark = "";
-                int id = exam.getInt("courseId");
+                String id = exam.getString("courseId");
                 name = exam.getString("courseName");
                 date = exam.getString("date");
                 arrangement = exam.getString("examArrangement");
@@ -108,13 +108,24 @@ public class JsonParser {
                 JSONObject exam = array.getJSONObject(i);
                 String name = exam.getString("name");
                 String place = exam.getString("place");
-                int id = exam.getInt("id");
+                String id = exam.getString("id");
                 String start_time = exam.getString("start_time");
                 String end_time = exam.getString("end_time");
+                String date = "";
 
-                String date = dateParse(start_time);
-                start_time = timeParse(start_time);
-                end_time = timeParse(end_time);
+                //显示转换,将之前强制设置的非空值转回实际的空值
+                if (!start_time.equals(end_time))
+                {
+                    date = dateParse(start_time);
+                    start_time = timeParse(start_time);
+                    end_time = timeParse(end_time);
+
+                    System.out.println("start and end ~~~~~~~:"+ start_time + " "+ end_time);
+                }
+                else {
+                    start_time = "";
+                    end_time = "";
+                }
 
                 Exam e = new Exam();
                 e.setDate(date);
@@ -163,7 +174,7 @@ public class JsonParser {
         }
     }
 
-    private static String timeParse(String oldDate)
+    /*private static String timeParse(String oldDate)
     {
         SimpleDateFormat formatter, FORMATTER;
         formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -179,9 +190,9 @@ public class JsonParser {
         System.out.println("NewDate-->"+ result);
 
         return result;
-    }
+    }*/
 
-    private static String dateParse(String oldDate)
+    /*private static String dateParse(String oldDate)
     {
         SimpleDateFormat formatter, FORMATTER;
         formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -197,5 +208,20 @@ public class JsonParser {
         System.out.println("NewDate-->"+ result);
 
         return result;
+    }*/
+
+    private static String dateParse(String oldDate)
+    {
+        return oldDate.split(" ")[0];
+    }
+
+    private static String timeParse(String oldDate)
+    {
+        if (oldDate.split(" ")[1].equals(""))
+        {
+            return oldDate.split(" ")[2];
+        }
+
+        return oldDate.split(" ")[1];
     }
 }

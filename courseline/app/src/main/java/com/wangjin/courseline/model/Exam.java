@@ -5,9 +5,8 @@ package com.wangjin.courseline.model;
  */
 public class Exam {
 
-    private int id;
 
-    private String start_time,location,subject,end_time,date,remark,start_end;
+    private String id,start_time,location,subject,end_time,date,remark,start_end;
 
     public String getStart_time() {
         return start_time;
@@ -21,11 +20,11 @@ public class Exam {
         this.remark = remark;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

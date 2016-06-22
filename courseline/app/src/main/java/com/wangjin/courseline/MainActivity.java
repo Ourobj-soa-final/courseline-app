@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < panels.length; i++) {
             panels[i] = (FrameLayout) findViewById(R.id.course_panel1 + i);
         }
+
         MHorizontalScrollView mHorizontalScrollView = (MHorizontalScrollView) findViewById(R.id.mhsv);
         LinearLayout courseLayout = (LinearLayout) findViewById(R.id.course_layout);
         mHorizontalScrollView.init(courseLayout, metrics);
